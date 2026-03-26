@@ -22,7 +22,7 @@
     .screen.active { display: block; }
 
     /* ── Welcome ── */
-    .tag {
+    .top-tag {
       display: inline-block;
       background: #e8f0fe;
       color: #1a56db;
@@ -67,12 +67,13 @@
       font-size: 0.97rem;
       font-weight: 700;
       cursor: pointer;
+      font-family: inherit;
       transition: opacity 0.15s, transform 0.1s;
     }
     .btn:hover { opacity: 0.88; transform: translateY(-1px); }
     .btn-primary { background: #1a56db; color: white; }
-    .btn-outline { background: white; color: #444; border: 2px solid #d1d5db; }
-    .btn-block { width: 100%; text-align: center; margin-top: 1.2rem; }
+    .btn-outline  { background: white; color: #444; border: 2px solid #d1d5db; }
+    .btn-block    { width: 100%; text-align: center; margin-top: 1.2rem; }
 
     /* ── Question ── */
     .progress-wrap {
@@ -98,34 +99,90 @@
     .question-text {
       font-size: 1.45rem;
       font-weight: 700;
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
       line-height: 1.3;
     }
 
-    .choice-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.9rem;
+    /* ── Slider ── */
+    .slider-wrap { margin-bottom: 2rem; }
+
+    .slider-endpoints {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+      gap: 1rem;
     }
-    .choice-btn {
-      padding: 1.3rem 1.1rem;
-      border: 2px solid #d1d5db;
-      border-radius: 12px;
+    .endpoint {
+      flex: 1;
       background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      transition: border-color 0.2s;
+    }
+    .endpoint.left  { text-align: left; }
+    .endpoint.right { text-align: right; }
+    .endpoint.active-left  { border-color: #1a56db; background: #f0f4ff; }
+    .endpoint.active-right { border-color: #1a56db; background: #f0f4ff; }
+    .ep-icon  { font-size: 1.4rem; display: block; margin-bottom: 0.3rem; }
+    .ep-label { font-size: 0.88rem; font-weight: 700; }
+    .ep-sub   { font-size: 0.74rem; color: #888; margin-top: 0.1rem; line-height: 1.3; }
+
+    .slider-track-wrap { padding: 0.5rem 0; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 99px;
+      background: linear-gradient(
+        to right,
+        #1a56db var(--val, 50%),
+        #e5e7eb var(--val, 50%)
+      );
+      outline: none;
       cursor: pointer;
-      text-align: left;
-      transition: all 0.15s;
-      font-family: inherit;
     }
-    .choice-btn:hover {
-      border-color: #1a56db;
-      background: #f0f4ff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(26,86,219,0.1);
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #1a56db;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      cursor: grab;
+      transition: transform 0.1s, border-color 0.15s;
     }
-    .choice-icon { font-size: 1.6rem; display: block; margin-bottom: 0.55rem; }
-    .choice-label { font-size: 0.97rem; font-weight: 700; display: block; margin-bottom: 0.2rem; }
-    .choice-sub { font-size: 0.78rem; color: #777; line-height: 1.4; }
+    input[type="range"]::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.15);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #1a56db;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      cursor: grab;
+    }
+
+    .slider-description {
+      text-align: center;
+      font-size: 0.88rem;
+      color: #1a56db;
+      font-weight: 600;
+      margin-top: 0.9rem;
+      min-height: 1.3em;
+      transition: opacity 0.2s;
+    }
+
+    .continue-wrap {
+      text-align: right;
+      margin-top: 1rem;
+    }
 
     /* ── Results ── */
     .results-header { margin-bottom: 1.4rem; }
@@ -148,9 +205,9 @@
       align-items: flex-start;
       margin-bottom: 0.9rem;
     }
-    .card-rank { font-size: 0.8rem; color: #999; margin-bottom: 0.15rem; }
+    .card-rank  { font-size: 0.78rem; color: #aaa; margin-bottom: 0.1rem; }
     .card-title { font-size: 1.08rem; font-weight: 800; }
-    .card-cat { font-size: 0.75rem; color: #888; margin-top: 0.1rem; }
+    .card-cat   { font-size: 0.75rem; color: #888; margin-top: 0.1rem; }
 
     .match-badge {
       font-size: 0.72rem;
@@ -169,69 +226,63 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 0.5rem;
-      margin-bottom: 0.85rem;
+      margin-bottom: 0.9rem;
     }
     .stat-box {
       background: #f9fafb;
       border-radius: 8px;
       padding: 0.5rem 0.6rem;
     }
-    .stat-label { font-size: 0.68rem; color: #888; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    .stat-label { font-size: 0.66rem; color: #888; margin-bottom: 0.2rem; text-transform: uppercase; letter-spacing: 0.03em; }
     .stat-value { font-size: 0.9rem; font-weight: 700; }
 
-    .growth-bar {
-      height: 4px;
-      background: #e5e7eb;
-      border-radius: 99px;
-      margin-top: 0.3rem;
-    }
+    .growth-bar { height: 4px; background: #e5e7eb; border-radius: 99px; margin-top: 0.3rem; }
     .growth-fill { height: 100%; border-radius: 99px; }
 
-    .auto-pill {
+    .pill {
       display: inline-block;
       font-size: 0.7rem;
       font-weight: 700;
       padding: 0.15rem 0.45rem;
       border-radius: 99px;
     }
-    .auto-low    { background: #d1fae5; color: #065f46; }
-    .auto-medium { background: #fef3c7; color: #92400e; }
-    .auto-high   { background: #fee2e2; color: #991b1b; }
+    .pill-green  { background: #d1fae5; color: #065f46; }
+    .pill-yellow { background: #fef3c7; color: #92400e; }
+    .pill-red    { background: #fee2e2; color: #991b1b; }
+    .pill-blue   { background: #dbeafe; color: #1e40af; }
+    .pill-gray   { background: #f3f4f6; color: #374151; }
 
-    .vol-pill {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 0.15rem 0.45rem;
-      border-radius: 99px;
-    }
-    .vol-high   { background: #dbeafe; color: #1e40af; }
-    .vol-medium { background: #f3f4f6; color: #374151; }
-    .vol-low    { background: #f3f4f6; color: #6b7280; }
-
-    .card-footer {
-      font-size: 0.78rem;
-      color: #666;
+    /* Tag rows */
+    .tag-section {
       border-top: 1px solid #f3f4f6;
-      padding-top: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 0.3rem;
+      padding-top: 0.8rem;
+      margin-top: 0.1rem;
     }
-    .footer-scores { color: #555; }
-    .footer-tag {
-      font-size: 0.7rem;
-      background: #f3f4f6;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      color: #666;
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+    .tag-row:last-child { margin-bottom: 0; }
+    .tag-item {
+      font-size: 0.73rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 99px;
+    }
+    .tag-pref    { background: #ede9fe; color: #5b21b6; }
+    .tag-quality { background: #d1fae5; color: #065f46; }
+
+    .score-line {
+      font-size: 0.76rem;
+      color: #999;
+      margin-top: 0.55rem;
     }
 
     .data-note {
-      font-size: 0.75rem;
-      color: #999;
+      font-size: 0.74rem;
+      color: #aaa;
       margin-top: 1.2rem;
       line-height: 1.6;
       border-top: 1px solid #e5e7eb;
@@ -239,7 +290,8 @@
     }
 
     @media (max-width: 520px) {
-      .choice-grid { grid-template-columns: 1fr; }
+      .slider-endpoints { flex-direction: column; gap: 0.5rem; }
+      .endpoint.right { text-align: left; }
       .card-grid { grid-template-columns: repeat(2, 1fr); }
       .welcome-title { font-size: 1.7rem; }
     }
@@ -250,18 +302,20 @@
 
   <!-- ── Welcome ── -->
   <div id="screen-welcome" class="screen active">
-    <div class="tag">NYC Labor Data · BLS 2024–2034 Projections</div>
+    <div class="top-tag">NYC Labor Data · BLS 2024–2034 Projections</div>
     <div class="welcome-title">NYC Job Compass</div>
     <div class="welcome-sub">
-      Answer 7 questions about what kind of work you'd actually do.
-      We rank careers by how well they fit you <em>and</em> how likely they are
-      to still be hiring in NYC 5–10 years from now.
+      Use the sliders to show where you fall on each dimension —
+      you're rarely all-or-nothing. We rank careers by how well they
+      fit you <em>and</em> how likely they are to still be hiring in NYC
+      5–10 years from now.
     </div>
     <div class="how-it-works">
-      <strong>How it works:</strong> Each result is scored on two things —
-      your <strong>preference match</strong> (does this fit how you want to work?) and
-      a <strong>future outlook score</strong> (10-yr growth projection, NYC job volume,
-      and automation resistance). Results are ranked by both combined.
+      <strong>How it works:</strong> 7 sliders refine your preferences.
+      Each result is scored on <strong>preference fit</strong> (how well the job
+      matches where you landed on each scale) and <strong>future outlook</strong>
+      (10-yr growth, NYC job volume, automation resistance). Results show tags
+      that trace back to your actual slider positions.
     </div>
     <button class="btn btn-primary" onclick="startQuiz()">Find My Fit →</button>
   </div>
@@ -275,7 +329,17 @@
       <div class="progress-label" id="progress-label">1 of 7</div>
     </div>
     <div class="question-text" id="question-text"></div>
-    <div class="choice-grid" id="choice-grid"></div>
+    <div class="slider-wrap">
+      <div class="slider-endpoints" id="slider-endpoints"></div>
+      <div class="slider-track-wrap">
+        <input type="range" id="main-slider" min="0" max="100" value="50"
+               oninput="onSliderMove(this)">
+      </div>
+      <div class="slider-description" id="slider-desc"></div>
+    </div>
+    <div class="continue-wrap">
+      <button class="btn btn-primary" onclick="recordAnswer()">Continue →</button>
+    </div>
   </div>
 
   <!-- ── Results ── -->
@@ -286,243 +350,319 @@
     </div>
     <div id="results-list"></div>
     <div class="data-note">
-      Data sources: BLS Occupational Outlook Handbook 2024–2034 national projections;
-      NYC/NY State DOL wage estimates; O*NET automation risk assessments.
-      Salary figures reflect NYC metro area medians. Growth figures are national
-      10-year projections — NYC trends generally track or exceed these in most sectors.
+      Data: BLS Occupational Outlook Handbook 2024–2034; NY State DOL wage estimates;
+      O*NET automation risk scores. Salaries = NYC metro medians.
+      Growth figures are national 10-yr projections — NYC typically tracks or exceeds
+      these in finance, tech, and healthcare.
     </div>
     <button class="btn btn-outline btn-block" onclick="restart()">← Start Over</button>
   </div>
 
 </div>
 <script>
-// ─────────────────────────────────────────────────────────────────
-// OCCUPATION DATA
-// fields: growth = 10yr % change (BLS 2024-2034)
-//         wage   = NYC metro annual median ($)
-//         auto   = automation risk: low / medium / high
-//         vol    = NYC job openings volume: high / medium / low
-//         works  = people | data | things | people-data | data-things | things-people
-//         env    = indoor | outdoor | mixed
-//         phys   = sedentary | moderate | active
-//         retrain= true = requires significant new credentials
-//         stability = 1-3 (3 = most stable/protected)
-//         sector = private | public | nonprofit | mixed
-// ─────────────────────────────────────────────────────────────────
+// ─── OCCUPATION DATA ──────────────────────────────────────────────────────────
+// growth  = BLS 10-yr projected % change (2024–2034)
+// wage    = NYC metro annual median ($)
+// auto    = automation risk: low / medium / high
+// vol     = NYC openings volume: high / medium / low
+// works   = people | data | things | people-data | things-people | data-things
+// env     = indoor | outdoor | mixed
+// phys    = sedentary | moderate | active
+// retrain = true → significant new credentials needed
+// stability = 1–3 (3 = most protected)
+// sector  = private | public | nonprofit | mixed
 const jobs = [
   // Healthcare
-  { title:"Registered Nurse",          cat:"Healthcare",    growth:6,   wage:105000, auto:"low",    vol:"high",   works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
-  { title:"Nurse Practitioner",         cat:"Healthcare",    growth:46,  wage:138000, auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
-  { title:"Home Health Aide",           cat:"Healthcare",    growth:22,  wage:38000,  auto:"low",    vol:"high",   works:"people",       env:"mixed",   phys:"active",   retrain:false, stability:3, sector:"mixed"    },
-  { title:"Physical Therapist",         cat:"Healthcare",    growth:17,  wage:97000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
-  { title:"Occupational Therapist",     cat:"Healthcare",    growth:12,  wage:95000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
-  { title:"Respiratory Therapist",      cat:"Healthcare",    growth:13,  wage:78000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
-  { title:"Medical Assistant",          cat:"Healthcare",    growth:15,  wage:45000,  auto:"medium", vol:"high",   works:"people",       env:"indoor",  phys:"moderate", retrain:false, stability:2, sector:"mixed"    },
-  { title:"Dental Hygienist",           cat:"Healthcare",    growth:9,   wage:84000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"private"  },
-  { title:"Dietitian / Nutritionist",   cat:"Healthcare",    growth:7,   wage:78000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"sedentary",retrain:true,  stability:2, sector:"mixed"    },
-  { title:"EMT / Paramedic",            cat:"Healthcare",    growth:6,   wage:52000,  auto:"low",    vol:"medium", works:"people",       env:"outdoor", phys:"active",   retrain:false, stability:2, sector:"mixed"    },
-  { title:"Physician Assistant",        cat:"Healthcare",    growth:28,  wage:128000, auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
-
+  { title:"Registered Nurse",         cat:"Healthcare",    growth:6,   wage:105000, auto:"low",    vol:"high",   works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Nurse Practitioner",        cat:"Healthcare",    growth:46,  wage:138000, auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Physician Assistant",       cat:"Healthcare",    growth:28,  wage:128000, auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Home Health Aide",          cat:"Healthcare",    growth:22,  wage:38000,  auto:"low",    vol:"high",   works:"people",      env:"mixed",   phys:"active",   retrain:false, stability:3, sector:"mixed"    },
+  { title:"Physical Therapist",        cat:"Healthcare",    growth:17,  wage:97000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Occupational Therapist",    cat:"Healthcare",    growth:12,  wage:95000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Respiratory Therapist",     cat:"Healthcare",    growth:13,  wage:78000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Dental Hygienist",          cat:"Healthcare",    growth:9,   wage:84000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"private"  },
+  { title:"Medical Assistant",         cat:"Healthcare",    growth:15,  wage:45000,  auto:"medium", vol:"high",   works:"people",      env:"indoor",  phys:"moderate", retrain:false, stability:2, sector:"mixed"    },
+  { title:"Dietitian / Nutritionist",  cat:"Healthcare",    growth:7,   wage:78000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"sedentary",retrain:true,  stability:2, sector:"mixed"    },
+  { title:"EMT / Paramedic",           cat:"Healthcare",    growth:6,   wage:52000,  auto:"low",    vol:"medium", works:"people",      env:"outdoor", phys:"active",   retrain:false, stability:2, sector:"mixed"    },
   // Tech
-  { title:"Software Developer",         cat:"Tech",          growth:17,  wage:148000, auto:"low",    vol:"high",   works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Data Analyst / Scientist",   cat:"Tech",          growth:36,  wage:112000, auto:"medium", vol:"high",   works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Cybersecurity Analyst",      cat:"Tech",          growth:33,  wage:128000, auto:"low",    vol:"high",   works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
-  { title:"Cloud / DevOps Engineer",    cat:"Tech",          growth:25,  wage:142000, auto:"low",    vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"IT Support Specialist",      cat:"Tech",          growth:8,   wage:65000,  auto:"medium", vol:"high",   works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
-  { title:"UX / Product Designer",      cat:"Tech",          growth:8,   wage:112000, auto:"medium", vol:"medium", works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Database Administrator",     cat:"Tech",          growth:9,   wage:108000, auto:"medium", vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
-
+  { title:"Software Developer",        cat:"Tech",          growth:17,  wage:148000, auto:"low",    vol:"high",   works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Data Analyst / Scientist",  cat:"Tech",          growth:36,  wage:112000, auto:"medium", vol:"high",   works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Cybersecurity Analyst",     cat:"Tech",          growth:33,  wage:128000, auto:"low",    vol:"high",   works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
+  { title:"Cloud / DevOps Engineer",   cat:"Tech",          growth:25,  wage:142000, auto:"low",    vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"UX / Product Designer",     cat:"Tech",          growth:8,   wage:112000, auto:"medium", vol:"medium", works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"IT Support Specialist",     cat:"Tech",          growth:8,   wage:65000,  auto:"medium", vol:"high",   works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
+  { title:"Database Administrator",    cat:"Tech",          growth:9,   wage:108000, auto:"medium", vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
   // Trades
-  { title:"Electrician",                cat:"Trades",        growth:11,  wage:92000,  auto:"low",    vol:"high",   works:"things",       env:"mixed",   phys:"active",   retrain:true,  stability:3, sector:"private"  },
-  { title:"Plumber",                    cat:"Trades",        growth:11,  wage:92000,  auto:"low",    vol:"high",   works:"things",       env:"mixed",   phys:"active",   retrain:true,  stability:3, sector:"private"  },
-  { title:"HVAC Technician",            cat:"Trades",        growth:9,   wage:72000,  auto:"low",    vol:"medium", works:"things",       env:"mixed",   phys:"active",   retrain:true,  stability:3, sector:"private"  },
-  { title:"Construction Manager",       cat:"Trades",        growth:8,   wage:118000, auto:"low",    vol:"medium", works:"people-data",  env:"outdoor", phys:"moderate", retrain:true,  stability:2, sector:"private"  },
-  { title:"Elevator Installer",         cat:"Trades",        growth:4,   wage:120000, auto:"low",    vol:"medium", works:"things",       env:"indoor",  phys:"active",   retrain:true,  stability:3, sector:"private"  },
-  { title:"Solar Panel Installer",      cat:"Trades",        growth:22,  wage:58000,  auto:"low",    vol:"medium", works:"things",       env:"outdoor", phys:"active",   retrain:false, stability:2, sector:"private"  },
-
+  { title:"Electrician",               cat:"Trades",        growth:11,  wage:92000,  auto:"low",    vol:"high",   works:"things",      env:"mixed",   phys:"active",   retrain:true,  stability:3, sector:"private"  },
+  { title:"Plumber",                   cat:"Trades",        growth:11,  wage:92000,  auto:"low",    vol:"high",   works:"things",      env:"mixed",   phys:"active",   retrain:true,  stability:3, sector:"private"  },
+  { title:"HVAC Technician",           cat:"Trades",        growth:9,   wage:72000,  auto:"low",    vol:"medium", works:"things",      env:"mixed",   phys:"active",   retrain:true,  stability:3, sector:"private"  },
+  { title:"Construction Manager",      cat:"Trades",        growth:8,   wage:118000, auto:"low",    vol:"medium", works:"people-data", env:"outdoor", phys:"moderate", retrain:true,  stability:2, sector:"private"  },
+  { title:"Elevator Installer",        cat:"Trades",        growth:4,   wage:120000, auto:"low",    vol:"medium", works:"things",      env:"indoor",  phys:"active",   retrain:true,  stability:3, sector:"private"  },
+  { title:"Solar Panel Installer",     cat:"Trades",        growth:22,  wage:58000,  auto:"low",    vol:"medium", works:"things",      env:"outdoor", phys:"active",   retrain:false, stability:2, sector:"private"  },
   // Finance / Business
-  { title:"Financial Analyst",          cat:"Finance",       growth:9,   wage:115000, auto:"medium", vol:"high",   works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Accountant / Auditor",       cat:"Finance",       growth:4,   wage:92000,  auto:"medium", vol:"high",   works:"data",         env:"indoor",  phys:"sedentary",retrain:true,  stability:2, sector:"mixed"    },
-  { title:"Compliance Officer",         cat:"Finance",       growth:5,   wage:98000,  auto:"low",    vol:"medium", works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
-  { title:"Actuary",                    cat:"Finance",       growth:23,  wage:138000, auto:"low",    vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"private"  },
-  { title:"Financial Advisor",          cat:"Finance",       growth:17,  wage:122000, auto:"low",    vol:"high",   works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Marketing Manager",          cat:"Business",      growth:8,   wage:135000, auto:"medium", vol:"high",   works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Logistics Manager",          cat:"Business",      growth:18,  wage:112000, auto:"medium", vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Operations Manager",         cat:"Business",      growth:8,   wage:115000, auto:"medium", vol:"high",   works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Supply Chain Analyst",       cat:"Business",      growth:18,  wage:88000,  auto:"medium", vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Budget Analyst",             cat:"Business",      growth:3,   wage:86000,  auto:"medium", vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:3, sector:"public"   },
-
+  { title:"Financial Analyst",         cat:"Finance",       growth:9,   wage:115000, auto:"medium", vol:"high",   works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Accountant / Auditor",      cat:"Finance",       growth:4,   wage:92000,  auto:"medium", vol:"high",   works:"data",        env:"indoor",  phys:"sedentary",retrain:true,  stability:2, sector:"mixed"    },
+  { title:"Compliance Officer",        cat:"Finance",       growth:5,   wage:98000,  auto:"low",    vol:"medium", works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
+  { title:"Actuary",                   cat:"Finance",       growth:23,  wage:138000, auto:"low",    vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"private"  },
+  { title:"Financial Advisor",         cat:"Finance",       growth:17,  wage:122000, auto:"low",    vol:"high",   works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Marketing Manager",         cat:"Business",      growth:8,   wage:135000, auto:"medium", vol:"high",   works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Logistics Manager",         cat:"Business",      growth:18,  wage:112000, auto:"medium", vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Operations Manager",        cat:"Business",      growth:8,   wage:115000, auto:"medium", vol:"high",   works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Supply Chain Analyst",      cat:"Business",      growth:18,  wage:88000,  auto:"medium", vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Budget Analyst",            cat:"Business",      growth:3,   wage:86000,  auto:"medium", vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:3, sector:"public"   },
   // Education / Social
-  { title:"Special Education Teacher",  cat:"Education",     growth:3,   wage:84000,  auto:"low",    vol:"high",   works:"people",       env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"public"   },
-  { title:"School Counselor",           cat:"Education",     growth:5,   wage:72000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"public"   },
-  { title:"Postsecondary Instructor",   cat:"Education",     growth:8,   wage:95000,  auto:"low",    vol:"medium", works:"people",       env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"mixed"    },
-  { title:"Instructional Designer",     cat:"Education",     growth:11,  wage:82000,  auto:"medium", vol:"medium", works:"people-data",  env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
-  { title:"Social Worker",              cat:"Social",        growth:9,   wage:65000,  auto:"low",    vol:"high",   works:"people",       env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"nonprofit"},
-
-  // Public sector / Govt
-  { title:"Urban Planner",              cat:"Public Sector", growth:4,   wage:84000,  auto:"low",    vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"public"   },
-  { title:"Environmental Scientist",    cat:"Public Sector", growth:7,   wage:82000,  auto:"low",    vol:"medium", works:"data",         env:"outdoor", phys:"moderate", retrain:true,  stability:2, sector:"mixed"    },
-  { title:"Sustainability Coordinator", cat:"Public Sector", growth:10,  wage:78000,  auto:"low",    vol:"medium", works:"people-data",  env:"mixed",   phys:"moderate", retrain:false, stability:2, sector:"mixed"    },
-  { title:"MTA Transit Operator",       cat:"Public Sector", growth:5,   wage:78000,  auto:"medium", vol:"high",   works:"things",       env:"indoor",  phys:"sedentary",retrain:false, stability:3, sector:"public"   },
-  { title:"Firefighter",                cat:"Public Safety", growth:3,   wage:90000,  auto:"low",    vol:"medium", works:"people",       env:"outdoor", phys:"active",   retrain:true,  stability:3, sector:"public"   },
-  { title:"Police Officer",             cat:"Public Safety", growth:-1,  wage:88000,  auto:"low",    vol:"high",   works:"people",       env:"outdoor", phys:"active",   retrain:true,  stability:3, sector:"public"   },
-
-  // Legal / Writing / Research
-  { title:"Paralegal",                  cat:"Legal",         growth:12,  wage:72000,  auto:"medium", vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Lawyer",                     cat:"Legal",         growth:8,   wage:185000, auto:"low",    vol:"medium", works:"people-data",  env:"indoor",  phys:"sedentary",retrain:true,  stability:2, sector:"mixed"    },
-  { title:"Technical Writer",           cat:"Creative",      growth:7,   wage:88000,  auto:"medium", vol:"medium", works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"Market Research Analyst",    cat:"Business",      growth:13,  wage:78000,  auto:"medium", vol:"high",   works:"data",         env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
-  { title:"PR Specialist",              cat:"Creative",      growth:6,   wage:78000,  auto:"medium", vol:"medium", works:"people",       env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
-
-  // Hospitality / Food
-  { title:"Chef / Head Cook",           cat:"Hospitality",   growth:6,   wage:65000,  auto:"low",    vol:"high",   works:"things-people",env:"indoor",  phys:"active",   retrain:false, stability:2, sector:"private"  },
-  { title:"Event Planner",              cat:"Hospitality",   growth:8,   wage:62000,  auto:"low",    vol:"medium", works:"people",       env:"mixed",   phys:"moderate", retrain:false, stability:2, sector:"mixed"    },
+  { title:"Special Ed Teacher",        cat:"Education",     growth:3,   wage:84000,  auto:"low",    vol:"high",   works:"people",      env:"indoor",  phys:"moderate", retrain:true,  stability:3, sector:"public"   },
+  { title:"School Counselor",          cat:"Education",     growth:5,   wage:72000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"public"   },
+  { title:"Postsecondary Instructor",  cat:"Education",     growth:8,   wage:95000,  auto:"low",    vol:"medium", works:"people",      env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"mixed"    },
+  { title:"Instructional Designer",    cat:"Education",     growth:11,  wage:82000,  auto:"medium", vol:"medium", works:"people-data", env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
+  { title:"Social Worker",             cat:"Social",        growth:9,   wage:65000,  auto:"low",    vol:"high",   works:"people",      env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"nonprofit"},
+  // Public Sector
+  { title:"Urban Planner",             cat:"Public Sector", growth:4,   wage:84000,  auto:"low",    vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:true,  stability:3, sector:"public"   },
+  { title:"Environmental Scientist",   cat:"Public Sector", growth:7,   wage:82000,  auto:"low",    vol:"medium", works:"data",        env:"outdoor", phys:"moderate", retrain:true,  stability:2, sector:"mixed"    },
+  { title:"Sustainability Coordinator",cat:"Public Sector", growth:10,  wage:78000,  auto:"low",    vol:"medium", works:"people-data", env:"mixed",   phys:"moderate", retrain:false, stability:2, sector:"mixed"    },
+  { title:"MTA Transit Operator",      cat:"Public Sector", growth:5,   wage:78000,  auto:"medium", vol:"high",   works:"things",      env:"indoor",  phys:"sedentary",retrain:false, stability:3, sector:"public"   },
+  { title:"Firefighter",               cat:"Public Safety", growth:3,   wage:90000,  auto:"low",    vol:"medium", works:"people",      env:"outdoor", phys:"active",   retrain:true,  stability:3, sector:"public"   },
+  { title:"Police Officer",            cat:"Public Safety", growth:-1,  wage:88000,  auto:"low",    vol:"high",   works:"people",      env:"outdoor", phys:"active",   retrain:true,  stability:3, sector:"public"   },
+  // Legal / Writing
+  { title:"Paralegal",                 cat:"Legal",         growth:12,  wage:72000,  auto:"medium", vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Lawyer",                    cat:"Legal",         growth:8,   wage:185000, auto:"low",    vol:"medium", works:"people-data", env:"indoor",  phys:"sedentary",retrain:true,  stability:2, sector:"mixed"    },
+  { title:"Technical Writer",          cat:"Creative",      growth:7,   wage:88000,  auto:"medium", vol:"medium", works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"Market Research Analyst",   cat:"Business",      growth:13,  wage:78000,  auto:"medium", vol:"high",   works:"data",        env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"private"  },
+  { title:"PR Specialist",             cat:"Creative",      growth:6,   wage:78000,  auto:"medium", vol:"medium", works:"people",      env:"indoor",  phys:"sedentary",retrain:false, stability:2, sector:"mixed"    },
+  // Hospitality
+  { title:"Chef / Head Cook",          cat:"Hospitality",   growth:6,   wage:65000,  auto:"low",    vol:"high",   works:"things-people",env:"indoor", phys:"active",   retrain:false, stability:2, sector:"private"  },
+  { title:"Event Planner",             cat:"Hospitality",   growth:8,   wage:62000,  auto:"low",    vol:"medium", works:"people",      env:"mixed",   phys:"moderate", retrain:false, stability:2, sector:"mixed"    },
 ];
 
-// ─────────────────────────────────────────────────────────────────
-// QUESTIONS
-// ─────────────────────────────────────────────────────────────────
+// ─── QUESTIONS ────────────────────────────────────────────────────────────────
+// Each question: left = 0, right = 100
 const questions = [
   {
     id: "worksWith",
-    text: "On a good workday, you're mostly...",
-    a: { label: "Working with people",           sub: "helping, advising, teaching, serving",        icon: "🤝", value: "people" },
-    b: { label: "Working with data or systems",  sub: "analyzing, building, solving, organizing",    icon: "📊", value: "data"   }
+    text: "What kind of work feels most natural to you?",
+    left:  { icon: "🤝", label: "People",          sub: "helping, advising, teaching, serving" },
+    right: { icon: "📊", label: "Data & Systems",  sub: "analyzing, building, organizing, solving" },
+    desc: v => v < 15 ? "Strongly people-focused"
+             : v < 35 ? "Leaning toward people"
+             : v < 65 ? "Balanced — open to both"
+             : v < 85 ? "Leaning toward data & systems"
+             : "Strongly data & systems focused"
   },
   {
     id: "environment",
-    text: "Where do you prefer to spend your day?",
-    a: { label: "Indoors",                        sub: "office, hospital, studio, classroom",          icon: "🏢", value: "indoor"  },
-    b: { label: "Outdoors or in the field",       sub: "job sites, streets, neighborhoods",            icon: "🌆", value: "outdoor" }
+    text: "Where do you prefer to spend most of your workday?",
+    left:  { icon: "🏢", label: "Indoors",         sub: "office, hospital, studio, classroom" },
+    right: { icon: "🌆", label: "Out in the field", sub: "job sites, streets, neighborhoods" },
+    desc: v => v < 15 ? "Strongly prefer indoors"
+             : v < 35 ? "Mostly indoors is ideal"
+             : v < 65 ? "Mix of both works for me"
+             : v < 85 ? "Prefer being out in the field"
+             : "Strongly prefer outdoor / field work"
   },
   {
     id: "physical",
     text: "How physical do you want the work to be?",
-    a: { label: "Mostly seated or desk work",     sub: "low physical demand",                          icon: "💺", value: "sedentary" },
-    b: { label: "On my feet or hands-on",         sub: "standing, moving, or using my body",           icon: "🚶", value: "active"    }
+    left:  { icon: "💺", label: "Desk-based",      sub: "seated, low physical demand" },
+    right: { icon: "🚶", label: "Hands-on / active", sub: "on my feet, using my body" },
+    desc: v => v < 15 ? "Strongly prefer desk / seated work"
+             : v < 35 ? "Prefer mostly desk-based"
+             : v < 65 ? "Moderate — somewhere in between"
+             : v < 85 ? "Prefer an active, hands-on role"
+             : "Strongly prefer physical / hands-on work"
   },
   {
     id: "retraining",
-    text: "Are you open to additional training or certifications?",
-    a: { label: "Yes — I'll invest in new skills",   sub: "programs, licenses, additional degrees",   icon: "🎓", value: true  },
-    b: { label: "Prefer to work with what I have",   sub: "no major new credentials right now",       icon: "⚡", value: false }
+    text: "How do you feel about additional training or certifications?",
+    left:  { icon: "⚡", label: "Use what I have",  sub: "no major new credentials right now" },
+    right: { icon: "🎓", label: "Open to learning",  sub: "programs, licenses, additional degrees" },
+    desc: v => v < 15 ? "Prefer to avoid new credentials"
+             : v < 35 ? "Open to short/minor training only"
+             : v < 65 ? "Somewhat open to retraining"
+             : v < 85 ? "Willing to invest in new credentials"
+             : "Fully open to significant retraining"
   },
   {
     id: "income",
-    text: "Do you need to earn at least $75,000/year?",
-    a: { label: "Yes — that's my floor",          sub: "filter out roles that don't meet that",        icon: "💰", value: true  },
-    b: { label: "I'm open to all salary ranges",  sub: "income is flexible for now",                  icon: "🔓", value: false }
+    text: "How important is hitting a $75,000+ salary?",
+    left:  { icon: "🔓", label: "Flexible",         sub: "salary range is open for now" },
+    right: { icon: "💰", label: "$75k+ is my floor", sub: "I need to meet that minimum" },
+    desc: v => v < 15 ? "Salary is fully flexible"
+             : v < 35 ? "Would prefer $75k+ but not a hard rule"
+             : v < 65 ? "Salary matters but I have some flexibility"
+             : v < 85 ? "$75k+ is a strong preference"
+             : "$75k+ is a hard requirement"
   },
   {
     id: "priority",
-    text: "What matters more to you right now?",
-    a: { label: "Stability and security",         sub: "reliable income, job protection",              icon: "🛡️", value: "stability" },
-    b: { label: "Growth and advancement",         sub: "rising demand, high ceiling",                  icon: "📈", value: "growth"    }
+    text: "What matters more in your next role?",
+    left:  { icon: "🛡️", label: "Stability",        sub: "reliable income, job protection" },
+    right: { icon: "📈", label: "Growth potential",  sub: "rising demand, high ceiling" },
+    desc: v => v < 15 ? "Stability is the top priority"
+             : v < 35 ? "Leaning toward stability"
+             : v < 65 ? "Balance of both"
+             : v < 85 ? "Leaning toward growth potential"
+             : "Growth potential is the top priority"
   },
   {
     id: "sector",
-    text: "Which environment appeals to you more?",
-    a: { label: "Private sector",                 sub: "companies, startups, firms",                   icon: "🏙️", value: "private" },
-    b: { label: "Public or nonprofit",            sub: "city agencies, government, NGOs",              icon: "🏛️", value: "public"  }
+    text: "Which work environment appeals to you more?",
+    left:  { icon: "🏙️", label: "Private sector",   sub: "companies, startups, firms" },
+    right: { icon: "🏛️", label: "Public / nonprofit", sub: "government, city agencies, NGOs" },
+    desc: v => v < 15 ? "Strongly prefer private sector"
+             : v < 35 ? "Leaning toward private sector"
+             : v < 65 ? "Open to either"
+             : v < 85 ? "Leaning toward public / nonprofit"
+             : "Strongly prefer public or nonprofit"
   }
 ];
 
-// ─────────────────────────────────────────────────────────────────
-// SCORING
-// ─────────────────────────────────────────────────────────────────
+// ─── STATE ────────────────────────────────────────────────────────────────────
+let answers = {};
+let currentQ = 0;
+
+// ─── SCORING ─────────────────────────────────────────────────────────────────
 function scoreJob(job, ans) {
-  let pref = 0;
+  const w   = ans.worksWith   / 100; // 0=people,    1=data
+  const e   = ans.environment / 100; // 0=indoor,    1=outdoor
+  const p   = ans.physical    / 100; // 0=sedentary, 1=active
+  const r   = ans.retraining  / 100; // 0=no retrain,1=open
+  const inc = ans.income      / 100; // 0=flexible,  1=need $75k+
+  const pr  = ans.priority    / 100; // 0=stability, 1=growth
+  const s   = ans.sector      / 100; // 0=private,   1=public
 
-  // worksWith — weight 2
-  if (ans.worksWith === "people") {
-    if (job.works.includes("people")) pref += 2;
-    else if (job.works === "things-people") pref += 1.5;
-    else pref += 0;
-  } else { // data
-    if (job.works === "data" || job.works === "data-things") pref += 2;
-    else if (job.works === "people-data") pref += 1.5;
-    else if (job.works === "things") pref += 0.8; // systematic/hands-on
-    else pref += 0;
+  const dim = [];
+
+  // worksWith (weight 2)
+  let ws;
+  switch (job.works) {
+    case "people":       ws = 1 - w; break;
+    case "data":         ws = w; break;
+    case "things":       ws = w * 0.75; break;
+    case "people-data":  ws = 0.55 + (0.45 - Math.abs(w - 0.5) * 0.9); break;
+    case "things-people":ws = (1 - w) * 0.8; break;
+    case "data-things":  ws = w * 0.85; break;
+    default:             ws = 0.5;
   }
+  dim.push([Math.max(0, Math.min(1, ws)), 2]);
 
-  // environment — weight 1
-  if (job.env === "mixed") {
-    pref += 0.5;
-  } else if (ans.environment === job.env) {
-    pref += 1;
-  }
+  // environment (weight 1)
+  let ev;
+  if (job.env === "indoor")   ev = 1 - e;
+  else if (job.env === "outdoor") ev = e;
+  else ev = 0.6;
+  dim.push([ev, 1]);
 
-  // physical — weight 1
-  if (ans.physical === "sedentary") {
-    if (job.phys === "sedentary") pref += 1;
-    else if (job.phys === "moderate") pref += 0.4;
-  } else { // active
-    if (job.phys === "active") pref += 1;
-    else if (job.phys === "moderate") pref += 0.7;
-  }
+  // physical (weight 1)
+  let ph;
+  if (job.phys === "sedentary") ph = 1 - p;
+  else if (job.phys === "active") ph = p;
+  else ph = Math.max(0, 1 - Math.abs(p - 0.5) * 1.4); // moderate peaks at 0.5
+  dim.push([Math.max(0, Math.min(1, ph)), 1]);
 
-  // retraining — weight 1
-  if (!ans.retraining && job.retrain) {
-    pref += 0;
-  } else {
-    pref += 1;
-  }
+  // retraining (weight 1)
+  const rt = job.retrain ? r : 0.85;
+  dim.push([rt, 1]);
 
-  // income floor — weight 1.5
-  if (ans.income && job.wage < 75000) {
-    pref += 0;
-  } else {
-    pref += 1.5;
-  }
+  // income (weight 1.5)
+  const ic = job.wage >= 75000 ? 1 : (1 - inc);
+  dim.push([ic, 1.5]);
 
-  // priority — weight 1
-  if (ans.priority === "stability") {
-    if (job.stability === 3) pref += 1;
-    else if (job.stability === 2) pref += 0.5;
-  } else { // growth
-    if (job.growth >= 20) pref += 1;
-    else if (job.growth >= 10) pref += 0.7;
-    else if (job.growth >= 5)  pref += 0.4;
-    else if (job.growth < 0)   pref += 0;
-    else pref += 0.2;
-  }
+  // priority (weight 1)
+  const stabNorm   = job.stability / 3;
+  const growNorm   = Math.min(Math.max((job.growth + 5) / 55, 0), 1);
+  const priorScore = stabNorm * (1 - pr) + growNorm * pr;
+  dim.push([priorScore, 1]);
 
-  // sector — weight 1
-  if (job.sector === "mixed") {
-    pref += 0.5;
-  } else if (ans.sector === "public" && (job.sector === "public" || job.sector === "nonprofit")) {
-    pref += 1;
-  } else if (ans.sector === "private" && job.sector === "private") {
-    pref += 1;
-  }
+  // sector (weight 1)
+  let sec;
+  if (job.sector === "private")   sec = 1 - s;
+  else if (job.sector === "public")    sec = s;
+  else if (job.sector === "nonprofit") sec = s * 0.9;
+  else sec = 0.55;
+  dim.push([sec, 1]);
 
-  const maxPref = 2 + 1 + 1 + 1 + 1.5 + 1 + 1; // 8.5
-  const prefNorm = Math.min(pref / maxPref, 1);
+  const totalWeight = dim.reduce((sum, d) => sum + d[1], 0);
+  const prefNorm    = dim.reduce((sum, d) => sum + d[0] * d[1], 0) / totalWeight;
 
-  // future score (independent of user prefs)
-  const growthNorm = Math.min(Math.max((job.growth + 5) / 55, 0), 1);
-  const autoMap  = { low: 1.0, medium: 0.5, high: 0.0 };
-  const volMap   = { high: 1.0, medium: 0.6, low: 0.25 };
-  const futureScore = growthNorm * 0.5 + autoMap[job.auto] * 0.35 + volMap[job.vol] * 0.15;
+  // Future score
+  const autoMap = { low: 1.0, medium: 0.5, high: 0.0 };
+  const volMap  = { high: 1.0, medium: 0.6, low: 0.25 };
+  const futureScore = growNorm * 0.5 + autoMap[job.auto] * 0.35 + volMap[job.vol] * 0.15;
 
   const total = prefNorm * 0.55 + futureScore * 0.45;
 
   const matchLabel = prefNorm >= 0.72 ? "Strong Match"
-                   : prefNorm >= 0.48 ? "Good Match"
+                   : prefNorm >= 0.5  ? "Good Match"
                    : "Partial Match";
   const matchClass = prefNorm >= 0.72 ? "match-high"
-                   : prefNorm >= 0.48 ? "match-med"
+                   : prefNorm >= 0.5  ? "match-med"
                    : "match-low";
 
   return { total, prefPct: Math.round(prefNorm * 100), futurePct: Math.round(futureScore * 100), matchLabel, matchClass };
 }
 
-// ─────────────────────────────────────────────────────────────────
-// STATE + NAVIGATION
-// ─────────────────────────────────────────────────────────────────
-let answers = {};
-let currentQ = 0;
+// ─── TAGS ────────────────────────────────────────────────────────────────────
+function getTags(job, ans) {
+  const w   = ans.worksWith   / 100;
+  const e   = ans.environment / 100;
+  const p   = ans.physical    / 100;
+  const r   = ans.retraining  / 100;
+  const inc = ans.income      / 100;
+  const pr  = ans.priority    / 100;
+  const s   = ans.sector      / 100;
 
+  const pref = [];    // purple — traces back to user's slider
+  const quality = []; // green  — objective job quality
+
+  // Work style
+  if (w < 0.35 && job.works.includes("people"))
+    pref.push("People-focused");
+  else if (w > 0.65 && (job.works === "data" || job.works === "things" || job.works === "data-things"))
+    pref.push("Data & systems");
+
+  // Environment
+  if (e < 0.35 && job.env === "indoor")
+    pref.push("Indoors");
+  else if (e > 0.65 && (job.env === "outdoor" || job.env === "mixed"))
+    pref.push("Field work");
+
+  // Physical
+  if (p < 0.35 && job.phys === "sedentary")
+    pref.push("Desk-based");
+  else if (p > 0.65 && (job.phys === "active" || job.phys === "moderate"))
+    pref.push("Active role");
+
+  // Retraining
+  if (r < 0.35 && !job.retrain)
+    pref.push("No retraining needed");
+  else if (r > 0.65 && job.retrain)
+    pref.push("Clear credential path");
+
+  // Income
+  if (inc > 0.5 && job.wage >= 75000)
+    pref.push("Meets $75k+ floor");
+
+  // Priority
+  if (pr < 0.35 && job.stability === 3)
+    pref.push("Highly stable");
+  else if (pr > 0.65 && job.growth >= 15)
+    pref.push("Fast-growing field");
+
+  // Sector
+  if (s > 0.65 && (job.sector === "public" || job.sector === "nonprofit"))
+    pref.push("Public / nonprofit");
+  else if (s < 0.35 && job.sector === "private")
+    pref.push("Private sector");
+
+  // Quality tags (always show if notable)
+  if (job.auto === "low")    quality.push("Automation-resistant");
+  if (job.growth >= 20)      quality.push(`+${job.growth}% growth`);
+  if (job.vol === "high")    quality.push("High NYC demand");
+
+  return { pref: pref.slice(0, 5), quality: quality.slice(0, 3) };
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────────────────────
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
@@ -536,10 +676,9 @@ function startQuiz() {
   renderQuestion();
 }
 
-function restart() {
-  startQuiz();
-}
+function restart() { startQuiz(); }
 
+// ─── QUESTION RENDERING ───────────────────────────────────────────────────────
 function renderQuestion() {
   const q = questions[currentQ];
   const pct = (currentQ / questions.length) * 100;
@@ -548,24 +687,48 @@ function renderQuestion() {
   document.getElementById('progress-label').textContent = `${currentQ + 1} of ${questions.length}`;
   document.getElementById('question-text').textContent = q.text;
 
-  const grid = document.getElementById('choice-grid');
-  grid.innerHTML = '';
+  // Reset slider to center
+  const slider = document.getElementById('main-slider');
+  slider.value = 50;
+  slider.style.setProperty('--val', '50%');
 
-  [q.a, q.b].forEach(choice => {
-    const btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.innerHTML = `
-      <span class="choice-icon">${choice.icon}</span>
-      <span class="choice-label">${choice.label}</span>
-      <span class="choice-sub">${choice.sub}</span>
-    `;
-    btn.onclick = () => recordAnswer(choice.value);
-    grid.appendChild(btn);
-  });
+  // Render endpoints
+  document.getElementById('slider-endpoints').innerHTML = `
+    <div class="endpoint left" id="ep-left">
+      <span class="ep-icon">${q.left.icon}</span>
+      <div class="ep-label">${q.left.label}</div>
+      <div class="ep-sub">${q.left.sub}</div>
+    </div>
+    <div class="endpoint right" id="ep-right">
+      <span class="ep-icon">${q.right.icon}</span>
+      <div class="ep-label">${q.right.label}</div>
+      <div class="ep-sub">${q.right.sub}</div>
+    </div>
+  `;
+
+  document.getElementById('slider-desc').textContent = q.desc(50);
+  updateEndpointHighlight(50);
 }
 
-function recordAnswer(value) {
-  answers[questions[currentQ].id] = value;
+function onSliderMove(input) {
+  const v = parseInt(input.value);
+  input.style.setProperty('--val', v + '%');
+  const q = questions[currentQ];
+  document.getElementById('slider-desc').textContent = q.desc(v);
+  updateEndpointHighlight(v);
+}
+
+function updateEndpointHighlight(v) {
+  const left  = document.getElementById('ep-left');
+  const right = document.getElementById('ep-right');
+  if (!left || !right) return;
+  left.classList.toggle('active-left',  v < 40);
+  right.classList.toggle('active-right', v > 60);
+}
+
+function recordAnswer() {
+  const v = parseInt(document.getElementById('main-slider').value);
+  answers[questions[currentQ].id] = v;
   currentQ++;
   if (currentQ < questions.length) {
     renderQuestion();
@@ -574,31 +737,32 @@ function recordAnswer(value) {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────
-// RESULTS RENDERING
-// ─────────────────────────────────────────────────────────────────
+// ─── RESULTS ─────────────────────────────────────────────────────────────────
 function showResults() {
   const scored = jobs
-    .map(job => ({ ...job, score: scoreJob(job, answers) }))
+    .map(job => ({ ...job, score: scoreJob(job, answers), tags: getTags(job, answers) }))
     .sort((a, b) => b.score.total - a.score.total)
     .slice(0, 12);
 
   document.getElementById('results-sub').textContent =
-    `Top ${scored.length} careers ranked from ${jobs.length} tracked NYC occupations, by preference fit + 10-year outlook.`;
+    `Top ${scored.length} of ${jobs.length} careers — ranked by preference fit + 10-year outlook. Tags trace back to your slider choices.`;
 
   const list = document.getElementById('results-list');
   list.innerHTML = '';
 
   scored.forEach((job, i) => {
-    const growthColor = job.growth >= 15 ? '#16a34a'
-                      : job.growth >= 5  ? '#ca8a04'
-                      : '#dc2626';
+    const growthColor = job.growth >= 15 ? '#16a34a' : job.growth >= 5 ? '#ca8a04' : '#dc2626';
     const growthWidth = Math.min(Math.max((job.growth / 50) * 100, 3), 100);
     const growthLabel = job.growth > 0 ? `+${job.growth}%` : `${job.growth}%`;
-    const wageLabel   = '$' + job.wage.toLocaleString();
 
-    const retrainTag  = job.retrain ? '<span class="footer-tag">Requires training</span>' : '';
-    const sectorLabel = { private:'Private sector', public:'Public sector', nonprofit:'Nonprofit', mixed:'Public or private' }[job.sector];
+    const autoClass = { low: 'pill-green', medium: 'pill-yellow', high: 'pill-red' }[job.auto];
+    const volClass  = { high: 'pill-blue', medium: 'pill-gray', low: 'pill-gray' }[job.vol];
+    const autoLabel = job.auto.charAt(0).toUpperCase() + job.auto.slice(1);
+    const volLabel  = job.vol.charAt(0).toUpperCase()  + job.vol.slice(1);
+
+    const prefTagsHTML    = job.tags.pref.map(t => `<span class="tag-item tag-pref">${t}</span>`).join('');
+    const qualityTagsHTML = job.tags.quality.map(t => `<span class="tag-item tag-quality">${t}</span>`).join('');
+    const hasAnyTags = job.tags.pref.length > 0 || job.tags.quality.length > 0;
 
     const card = document.createElement('div');
     card.className = 'card';
@@ -622,31 +786,31 @@ function showResults() {
         </div>
         <div class="stat-box">
           <div class="stat-label">NYC Median</div>
-          <div class="stat-value">${wageLabel}</div>
+          <div class="stat-value">$${job.wage.toLocaleString()}</div>
         </div>
         <div class="stat-box">
           <div class="stat-label">Auto Risk</div>
-          <div style="margin-top:0.25rem">
-            <span class="auto-pill auto-${job.auto}">${job.auto.charAt(0).toUpperCase() + job.auto.slice(1)}</span>
-          </div>
+          <div style="margin-top:0.3rem"><span class="pill ${autoClass}">${autoLabel}</span></div>
         </div>
         <div class="stat-box">
           <div class="stat-label">NYC Volume</div>
-          <div style="margin-top:0.25rem">
-            <span class="vol-pill vol-${job.vol}">${job.vol.charAt(0).toUpperCase() + job.vol.slice(1)}</span>
-          </div>
+          <div style="margin-top:0.3rem"><span class="pill ${volClass}">${volLabel}</span></div>
         </div>
       </div>
 
-      <div class="card-footer">
-        <span class="footer-scores">
-          Pref match <strong>${job.score.prefPct}%</strong> &middot; Outlook <strong>${job.score.futurePct}%</strong>
-        </span>
-        <span style="display:flex;gap:0.35rem;flex-wrap:wrap">
-          <span class="footer-tag">${sectorLabel}</span>
-          ${retrainTag}
-        </span>
-      </div>
+      ${hasAnyTags ? `
+      <div class="tag-section">
+        ${prefTagsHTML || qualityTagsHTML ? `
+          <div class="tag-row">
+            ${prefTagsHTML}
+            ${qualityTagsHTML}
+          </div>
+        ` : ''}
+        <div class="score-line">Pref match ${job.score.prefPct}% · Outlook ${job.score.futurePct}%${job.retrain ? ' · Requires training/credentials' : ''}</div>
+      </div>` : `
+      <div class="tag-section">
+        <div class="score-line">Pref match ${job.score.prefPct}% · Outlook ${job.score.futurePct}%${job.retrain ? ' · Requires training/credentials' : ''}</div>
+      </div>`}
     `;
     list.appendChild(card);
   });
